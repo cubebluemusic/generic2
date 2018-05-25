@@ -4,33 +4,32 @@ const port = 3017;
 
 var mysql = require('mysql');
 
-var server = mysql.createserver({
+var serverConnect = mysql.createConnection({
 	    host: "localhost",
 	    user: "cubebluemusic",
 	    password: "cisumeulbebuc",
 	    database: "employees"
 });
 
-server.connect(function (errorMessage) {
-	    if (errorMessage) throw errorMessage;
-		server.query("select * from employees limit 15", function (errorMessage, dataOutput, fields) {
-		           if (errorMessage) throw errorMessage;
-				   console.log("Success");
-		           console.log(dataOutput);
-		       });
-
-});
-
 const server = http.createServer((req, res) => {
 	    res.statusCode = 200;
-	    server.connect(function (errorMessage) {
-		         server.query("select * from employees limit 15", function (errorMessage, dataOutput, fields) {
+	    serverConnect.connect(function (errorMessage) {
+		         serverConnect.query("select * from employees limit 15", function (errorMessage, dataOutput, fields) {
 				         if (errorMessage) throw errorMessage;
-				         var message = '<html>\n'+
-						 '<head>\n<meta charset="utf-8">\n' +
-						 '<meta title="Data page">\n'+
-						 '<meta name="author" content="Nick Zamora">\n</head>\n' +
-						 '<body>\n<table border = 1>\n';
+				         var message = '<html>'
+					 +'<head>'
+					 +'<meta charset="utf-8"> '
+					 +'<meta title="Data page">'
+					 +'<meta name="author" content="Nick Zamora">'
+					 +'<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">'
+					 +'</head>'
+					 +'<body>'
+					 +'<table class="table table-striped">';
+				        message += '<tr>\n';
+				 	for (var f in fields){
+						message += '<td>' + fields[f].name + '</td>\n';
+					}
+					message += '</tr>\n';
 				 	for (var i in dataOutput){
 								message += '<tr><td>' + dataOutput[i].emp_no + '</td>' +
 								'<td>' + dataOutput[i].birth_date + '</td>' +
